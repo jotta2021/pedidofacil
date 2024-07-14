@@ -9,7 +9,7 @@ import { contextAuth } from "../context";
 import { LoaderCircle } from 'lucide-react';
 import { useToast } from "@/components/ui/use-toast";
 import { Toaster } from "@/components/ui/toaster";
-import { canSSRGuest } from "../utils/canSSRGuest";
+
 const Login = () => {
   const [email,setEmail] = useState('')
 const [password,setPassword] = useState('')
