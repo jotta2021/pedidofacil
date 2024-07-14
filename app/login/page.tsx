@@ -6,14 +6,21 @@ import Image from "next/image";
 import Link from "next/link";
 import Colors from "./../../lib/colors.json";
 import { contextAuth } from "../context";
+import { LoaderCircle } from 'lucide-react';
+import { useToast } from "@/components/ui/use-toast";
+import { Toaster } from "@/components/ui/toaster";
+import { canSSRGuest } from "../utils/canSSRGuest";
 const Login = () => {
   const [email,setEmail] = useState('')
 const [password,setPassword] = useState('')
+const [loading,setLoading] = useState(false)
+const {toast} = useToast()
 const {singIn} = useContext(contextAuth)
+
 
 async function handleLogin(event:FormEvent){
 
-
+setLoading(true)
 event.preventDefault()
 if(email!=='' && password!==''){
 let data = {
@@ -21,12 +28,18 @@ let data = {
   password
 }
   singIn(data)
+  setLoading(false)
 }else{
-  alert('Preencha os campos vázios')
+
+  toast({
+    title:'Preencha os campos vazios'
+  })
+  setLoading(false)
 }
 }
   return (
-    <div>
+    <div className='bg-white w-full'>
+      <Toaster/>
       <head>
         <title>Pedido Fácil - Faça seu login</title>
       </head>
@@ -59,21 +72,31 @@ let data = {
                 onChange={(e)=> setPassword(e.target.value)}
               />
 
-              <Button className="bg-[#F1CD65] hover:bg-[#FDC522] duration-300"
+              <Button className={`bg-[${Colors.blue}] hover:bg-blue-500 duration-300`}
               onClick={handleLogin}
               >
-                Login
+                {
+                  loading ?
+                  <LoaderCircle className='animate-spin'/> :
+
+                  ' Login'
+                }
+               
               </Button>
-              <p className="text-white text-center text-sm">
+              <p className="text-center text-sm">
                 Ainda não possui uma conta?{" "}
-                <Link href={"/register"}>Cadastre-se</Link>
+                <Link href={"/register"} className="font-semibold">Cadastre-se</Link>
               </p>
             </div>
           </form>
         </div>
       </div>
     </div>
+
+
   );
 };
 
 export default Login;
+
+
