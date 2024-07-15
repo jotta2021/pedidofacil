@@ -18,7 +18,7 @@ export default function RootLayout({
       <ContextProvider>
         <Toaster/>
          <body className={inter.className}>
-          <Header/>
+ 
           {children}
           </body>
       </ContextProvider>

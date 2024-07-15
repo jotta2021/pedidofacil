@@ -30,7 +30,10 @@ const Header = () => {
             <div className="flex items-center gap-1 border-r px-2">
                        <Store size={24} color='#449cd4' className="max-md:hidden"/>
                        <div className="flex flex-col">
-                         <li className='cursor-pointer hover:text-[#449cd4] duration-300 text-sm'>Cardápio</li>
+                        <Link href='/products'>
+                        <li className='cursor-pointer hover:text-[#449cd4] duration-300 text-sm'>Cardápio</li>
+                        </Link>
+                         
                          <p className="text-[0.7rem] text-slate-700 max-md:hidden">Lista e cadastro de produtos</p>
                        </div>
                       

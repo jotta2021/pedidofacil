@@ -49,7 +49,7 @@ function teste() {
         <head>
             <title>Pedido Fácil - Dashboard</title>
         </head>
-     
+     <Header/>
       <div className="max-md:mx-4 mx-40">
         <div className="mx-4 mt-4 ">
           <div className="flex items-center gap-2">
