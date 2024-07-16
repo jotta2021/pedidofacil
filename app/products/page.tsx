@@ -28,14 +28,26 @@ import Header from "../_components/_header";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { FcAddImage } from "react-icons/fc";
+import { canSSRAuth } from "../utils/canSSRAuth";
+import { setupApiConfig } from "../services/api";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectTrigger,
+  SelectValue,
+  SelectItem
+} from "@/components/ui/select";
+
 const Products = () => {
   const { toast } = useToast();
   const [ProductsList, setProductsList] = useState([]);
+  const [categoriesList, setCategoriesList] = useState([]);
   const [open, setOpen] = useState(false);
   const [disabled, setDisabled] = useState(true);
   const inputFile = useRef<HTMLInputElement>(null);
   const [imageUrl, setImageUrl] = useState("");
-  const [imageFile, setImageFile] = useState<File|null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
   type ProductProps = {
     name: string;
     price: number;
@@ -46,7 +58,11 @@ const Products = () => {
       name: string;
     };
   };
-
+  
+  type CategoriesProps = {
+    id:string,
+    name:string,
+  }
   //busca as categorias da api
   async function getProducts() {
     await api
@@ -63,21 +79,40 @@ const Products = () => {
         });
       });
   }
+
+  async function getCategories() {
+    await api
+      .get("/categories")
+      .then((res) => {
+        setCategoriesList(res.data);
+      })
+      .catch((error) => {
+        toast({
+          title: "Erro ao categorias",
+          description: error,
+          variant: "destructive",
+        });
+      });
+  }
   useEffect(() => {
     getProducts();
+    getCategories();
   }, []);
+
+  useEffect(()=> {
+
+  },[])
 
   // funcao para pegar a imagem do input
   function getImage() {
     inputFile.current!.click();
   }
-  function handleImage(e: React.ChangeEvent<HTMLInputElement>){
+  function handleImage(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files && e.target.files.length > 0) {
-         const file = e?.target?.files[0]
-    setImageFile(file)
-    setImageUrl(URL.createObjectURL(file))
+      const file = e?.target?.files[0];
+      setImageFile(file);
+      setImageUrl(URL.createObjectURL(file));
     }
-  
   }
 
   return (
@@ -98,6 +133,7 @@ const Products = () => {
           </Button>
         </div>
         <div className="my-4">
+   
           <Table>
             <TableHeader>
               <TableRow>
@@ -134,7 +170,7 @@ const Products = () => {
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogContent>
             <DialogHeader className="font-semibold">
-              Adicione uma novo produto
+              Adicione um novo produto
             </DialogHeader>
             <div className="flex flex-col  justify-center gap-2 w-full">
               <form className="flex flex-col gap-4">
@@ -144,26 +180,49 @@ const Products = () => {
                     className="cursor-pointer absolute z-50"
                     onClick={getImage}
                   />
-                  <img
-                  src={imageUrl}
-                className="w-full h-full object-cover opacity-80 rounded-sm"
+                  {imageFile !== null && (
+                    <img
+                      src={imageUrl}
+                      className="w-full h-full object-cover opacity-80 rounded-sm"
+                    />
+                  )}
+
+                  <input
+                    type="file"
+                    ref={inputFile}
+                    onChange={(e) => handleImage(e)}
+                    className="hidden"
                   />
-                  <input type="file" ref={inputFile} 
-                
-                  onChange={(e)=> handleImage(e)}
-                  className="hidden" />
                 </div>
                 <div className="flex flex-col gap-1">
                   <label>Nome</label>
                   <Input placeholder="Digite o nome da categoria" />
                 </div>
                 <div className="flex flex-col gap-1">
+                  <label>Categoria</label>
+                  <Select >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione uma categoria" />
+                      <SelectContent>
+                        <SelectGroup>
+                        {categoriesList.map((item: CategoriesProps) => (
+                          <SelectItem key={item.id} value={item.id} >{ item.name}</SelectItem>
+                        ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </SelectTrigger>
+                  </Select>
+                </div>
+                <div className="flex flex-col gap-1">
                   <label>Preço</label>
                   <Input placeholder="Digite o nome da categoria" />
                 </div>
                 <div className="flex flex-col gap-1">
-                  <label>Categoria</label>
-                  <Input placeholder="Digite o nome da categoria" />
+                  <label>Descrição do produto</label>
+                  <textarea
+                    placeholder="Descreva o seu produto..."
+                    className="border"
+                  />
                 </div>
                 <Button
                   className={`bg-[${Colors.blue}] mx-8`}
