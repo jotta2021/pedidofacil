@@ -28,8 +28,10 @@ if(name!=='' && email!=='' && password!==''){
   const data = {
     name, email,password
   }
- Register(data)
- setLoading(false)
+ Register(data).finally(()=> {
+  setLoading(false)
+ })
+ 
 }
 else{
 toast({

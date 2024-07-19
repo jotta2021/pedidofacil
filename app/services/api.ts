@@ -7,7 +7,7 @@ export function setupApiConfig(ctx = undefined){
 
 
     const api = axios.create({
-        baseURL:'http://localhost:3333',
+        baseURL:'https://pizzariaapi.onrender.com',
 headers: {
     Authorization:`Bearer ${cookies['@auth.token']}`
 }

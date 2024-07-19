@@ -36,9 +36,9 @@ import {
   SelectGroup,
   SelectTrigger,
   SelectValue,
-  SelectItem
+  SelectItem,
 } from "@/components/ui/select";
-
+import CurrencyInput from "react-currency-input-field";
 const Products = () => {
   const { toast } = useToast();
   const [ProductsList, setProductsList] = useState([]);
@@ -48,6 +48,7 @@ const Products = () => {
   const inputFile = useRef<HTMLInputElement>(null);
   const [imageUrl, setImageUrl] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [value, setValue] = useState<string | undefined>('');
   type ProductProps = {
     name: string;
     price: number;
@@ -58,11 +59,11 @@ const Products = () => {
       name: string;
     };
   };
-  
+
   type CategoriesProps = {
-    id:string,
-    name:string,
-  }
+    id: string;
+    name: string;
+  };
   //busca as categorias da api
   async function getProducts() {
     await api
@@ -74,9 +75,9 @@ const Products = () => {
       .catch((error) => {
         toast({
           title: "Erro ao buscar produtos do cardápio",
-          description: error,
           variant: "destructive",
         });
+        console.log(error);
       });
   }
 
@@ -89,7 +90,6 @@ const Products = () => {
       .catch((error) => {
         toast({
           title: "Erro ao categorias",
-          description: error,
           variant: "destructive",
         });
       });
@@ -99,9 +99,7 @@ const Products = () => {
     getCategories();
   }, []);
 
-  useEffect(()=> {
-
-  },[])
+  useEffect(() => {}, []);
 
   // funcao para pegar a imagem do input
   function getImage() {
@@ -114,7 +112,9 @@ const Products = () => {
       setImageUrl(URL.createObjectURL(file));
     }
   }
-
+  const handleValueChange = (value: string | undefined, name?: string) => {
+    setValue(value);
+  };
   return (
     <div className="w-full">
       <Toaster />
@@ -133,7 +133,6 @@ const Products = () => {
           </Button>
         </div>
         <div className="my-4">
-   
           <Table>
             <TableHeader>
               <TableRow>
@@ -145,23 +144,24 @@ const Products = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {ProductsList.map((item: ProductProps) => (
-                <TableRow key={item.id}>
-                  <TableCell>
-                    <img
-                      src={`http://localhost:3333/files/${item.banner}`}
-                      alt={item.name}
-                      width={80}
-                      height={80}
-                      className="rounded-md"
-                    />
-                  </TableCell>
-                  <TableCell>{item.name}</TableCell>
-                  <TableCell>{item.category.name}</TableCell>
-                  <TableCell>{item.description}</TableCell>
-                  <TableCell>{item.price}</TableCell>
-                </TableRow>
-              ))}
+              {ProductsList.length > 0 &&
+                ProductsList.map((item: ProductProps) => (
+                  <TableRow key={item.id}>
+                    <TableCell>
+                      <Image
+                        src={`https://pizzariaapi.onrender.com/files/${item.banner}`}
+                        alt={item.name}
+                        width={80}
+                        height={80}
+                        className="rounded-md"
+                      />
+                    </TableCell>
+                    <TableCell>{item.name}</TableCell>
+                    <TableCell>{item.category.name}</TableCell>
+                    <TableCell>{item.description}</TableCell>
+                    <TableCell>{item.price}</TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
         </div>
@@ -181,9 +181,11 @@ const Products = () => {
                     onClick={getImage}
                   />
                   {imageFile !== null && (
-                    <img
+                    <Image
                       src={imageUrl}
                       className="w-full h-full object-cover opacity-80 rounded-sm"
+                      fill
+                      alt="image"
                     />
                   )}
 
@@ -200,14 +202,16 @@ const Products = () => {
                 </div>
                 <div className="flex flex-col gap-1">
                   <label>Categoria</label>
-                  <Select >
+                  <Select>
                     <SelectTrigger>
                       <SelectValue placeholder="Selecione uma categoria" />
                       <SelectContent>
                         <SelectGroup>
-                        {categoriesList.map((item: CategoriesProps) => (
-                          <SelectItem key={item.id} value={item.id} >{ item.name}</SelectItem>
-                        ))}
+                          {categoriesList.map((item: CategoriesProps) => (
+                            <SelectItem key={item.id} value={item.id}>
+                              {item.name}
+                            </SelectItem>
+                          ))}
                         </SelectGroup>
                       </SelectContent>
                     </SelectTrigger>
@@ -215,7 +219,15 @@ const Products = () => {
                 </div>
                 <div className="flex flex-col gap-1">
                   <label>Preço</label>
-                  <Input placeholder="Digite o nome da categoria" />
+                  <CurrencyInput
+                    id="currency-input"
+                    name="currency-input"
+                    placeholder="Digite um valor"
+                    defaultValue={value}
+                    decimalsLimit={2}
+                    onValueChange={handleValueChange}
+                    intlConfig={{ locale: "pt-BR", currency: "BRL" }}
+                  />
                 </div>
                 <div className="flex flex-col gap-1">
                   <label>Descrição do produto</label>

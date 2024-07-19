@@ -27,8 +27,8 @@ let data = {
   email,
   password
 }
-  singIn(data)
-  setLoading(false)
+  singIn(data).finally(()=> setLoading(false))
+ 
 }else{
 
   toast({

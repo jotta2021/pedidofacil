@@ -3,9 +3,13 @@ const nextConfig = {
     images: {
         remotePatterns: [
             {
+                protocol: 'https',
+                hostname: 'pizzariaapi.onrender.com',
+                pathname: '/files/**',
+            },
+            {
                 protocol: 'http',
-                hostname: '',
-                port: '3333',
+                hostname: 'localhost',
                 pathname: '/files/**',
             },
         ],

@@ -112,7 +112,7 @@ const [category,setCategory] = useState('')
               </TableRow>
             </TableHeader>
             <TableBody>
-              {categoriesList.map((item: { id: string; name: string }) => (
+              { categoriesList.length> 0 && categoriesList.map((item: { id: string; name: string }) => (
                 <TableRow key={item.id}>
                   <TableCell>{item.name}</TableCell>
                 </TableRow>
