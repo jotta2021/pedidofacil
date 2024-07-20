@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import Head from "next/head";
 import Colors from "../../lib/colors.json";
-import React, { useEffect, useRef, useState } from "react";
+import React, { FormEvent, useEffect, useRef, useState } from "react";
 import { api } from "../services/apiClient";
 import {
   Table,
@@ -39,6 +39,7 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import CurrencyInput from "react-currency-input-field";
+import FormatCurrency from "../helpers/formatCurrency";
 const Products = () => {
   const { toast } = useToast();
   const [ProductsList, setProductsList] = useState([]);
@@ -49,6 +50,9 @@ const Products = () => {
   const [imageUrl, setImageUrl] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [value, setValue] = useState<string | undefined>('');
+  const [description,setDescription] = useState<string>('');
+  const [categorySelect,setCategorySelect] = useState<string>('');
+  const [name,setName] =  useState<string>('')
   type ProductProps = {
     name: string;
     price: number;
@@ -115,14 +119,62 @@ const Products = () => {
   const handleValueChange = (value: string | undefined, name?: string) => {
     setValue(value);
   };
+
+useEffect(()=>{
+if(categorySelect!=='' && description!=='' && value!=='' && name!==''){
+  setDisabled(false)
+}else{
+  setDisabled(true)
+}
+
+},[categorySelect, description,  value,name])
+
+  async function addProduct(e: FormEvent){
+    e.preventDefault()
+    const formatNumber: string = value ? value.replace(',', '.') : '';
+    if(categorySelect!=='' && description!=='' && value!=='' && name!==''){
+const data = new FormData(); 
+
+data.append('name', name);
+data.append('price', formatNumber);
+data.append('category_id', categorySelect);
+if (imageFile) {
+  data.append('file', imageFile);
+}
+
+data.append('description', description);
+
+console.log(data)
+await api.post('/addProduct', data)
+.then((res)=> {
+  toast({
+    title:'Obaa! novo produto cadastrado'
+  })
+  setOpen(false)
+  getProducts()
+})
+.catch((error)=> {
+  toast({
+    title:'Opss! erro ao cadastrar produto',
+    variant:'destructive'
+  })
+  console.log(error)
+})
+
+    }else{
+      toast({
+        title:'Preencha os campos vazios '
+      })
+    }
+  }
   return (
-    <div className="w-full">
+    <div className="w-full ">
       <Toaster />
       <head>
         <title>Pedido Fácil - Cardápio</title>
       </head>
       <Header />
-      <div className=" my-4 mx-40 max-md:mx-4">
+      <div className=" my-4 mx-40 max-md:mx-4 bg-white px-3 py-3 rounded-md" >
         <div className="flex items-center justify-between">
           <h1 className="font-semibold text-[1.2rem]">Cardápio</h1>
           <Button
@@ -148,31 +200,33 @@ const Products = () => {
                 ProductsList.map((item: ProductProps) => (
                   <TableRow key={item.id}>
                     <TableCell>
-                      <Image
+                      <div className="relative w-20 h-20 rounded-sm bg-white">
+                         <Image
                         src={`https://pizzariaapi.onrender.com/files/${item.banner}`}
                         alt={item.name}
-                        width={80}
-                        height={80}
-                        className="rounded-md"
+                      fill
+                        className='object-cover w-full rounded-md'
                       />
+                      </div>
+                     
                     </TableCell>
                     <TableCell>{item.name}</TableCell>
                     <TableCell>{item.category.name}</TableCell>
                     <TableCell>{item.description}</TableCell>
-                    <TableCell>{item.price}</TableCell>
+                    <TableCell>{FormatCurrency(item.price) }</TableCell>
                   </TableRow>
                 ))}
             </TableBody>
           </Table>
         </div>
       </div>
-      <div className="flex items-center justify-center">
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogContent>
+      <div className="flex items-center justify-center w-10">
+        <Dialog open={open} onOpenChange={setOpen}  >
+          <DialogContent className="w-[80vw]">
             <DialogHeader className="font-semibold">
               Adicione um novo produto
             </DialogHeader>
-            <div className="flex flex-col  justify-center gap-2 w-full">
+            <div className="flex flex-col  justify-center gap-2 ">
               <form className="flex flex-col gap-4">
                 <div className="w-full h-52 border flex items-center justify-center relative rounded-sm">
                   <FcAddImage
@@ -198,11 +252,15 @@ const Products = () => {
                 </div>
                 <div className="flex flex-col gap-1">
                   <label>Nome</label>
-                  <Input placeholder="Digite o nome da categoria" />
+                  <Input placeholder="Digite o nome do produto" 
+                  value={name}
+                  
+                  onChange={(e)=> setName(e.target.value)}
+                  />
                 </div>
                 <div className="flex flex-col gap-1">
                   <label>Categoria</label>
-                  <Select>
+                  <Select value={categorySelect} onValueChange={setCategorySelect}> 
                     <SelectTrigger>
                       <SelectValue placeholder="Selecione uma categoria" />
                       <SelectContent>
@@ -220,6 +278,7 @@ const Products = () => {
                 <div className="flex flex-col gap-1">
                   <label>Preço</label>
                   <CurrencyInput
+                  className="border py-2 rounded-sm px-2 text-sm"
                     id="currency-input"
                     name="currency-input"
                     placeholder="Digite um valor"
@@ -233,12 +292,15 @@ const Products = () => {
                   <label>Descrição do produto</label>
                   <textarea
                     placeholder="Descreva o seu produto..."
-                    className="border"
+                    className="border px-2 text-sm"
+                    value={description}
+                    onChange={(e)=> setDescription(e.target.value)}
                   />
                 </div>
                 <Button
                   className={`bg-[${Colors.blue}] mx-8`}
                   disabled={disabled}
+                  onClick={addProduct}
                 >
                   Confirmar
                 </Button>

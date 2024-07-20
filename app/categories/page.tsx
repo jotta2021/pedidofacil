@@ -94,7 +94,7 @@ const [category,setCategory] = useState('')
         <title>Pedido Fácil - Nova Categoria</title>
       </head>
       <Header />
-      <div className=" my-4 mx-40 max-md:mx-4">
+      <div className=" my-4 mx-40 max-md:mx-4 bg-white px-3 py-3 rounded-md">
         <div className="flex items-center justify-between">
           <h1 className="font-semibold text-[1.2rem]">Categorias</h1>
           <Button
@@ -124,7 +124,7 @@ const [category,setCategory] = useState('')
       <div className="flex items-center justify-center">
         <Dialog open={open} onOpenChange={setOpen}>
           
-          <DialogContent>
+          <DialogContent className="w-[80vw]">
             <DialogHeader className='font-semibold'>Adicione uma nova categoria</DialogHeader>
             <div className='flex flex-col  justify-center gap-2 w-full'>
               <div className="flex flex-col gap-1">

@@ -50,7 +50,7 @@ function teste() {
             <title>Pedido Fácil - Dashboard</title>
         </head>
      <Header/>
-      <div className="max-md:mx-4 mx-40">
+      <div className="max-md:mx-4 mx-20">
         <div className="mx-4 mt-4 ">
           <div className="flex items-center gap-2">
             <h1 className="font-semibold text-[1.2rem]">Meus Pedidos</h1>
@@ -69,8 +69,8 @@ function teste() {
             
           </div>
 
-          <div className="my-4 grid grid-cols-2   gap-10 max-md:grid-cols-1 ">
-            <Card className="bg-white w-full h-[80vh] rounded-sm overflow-auto ">
+          <div className="my-4 flex   gap-10 max-md:flex-col ">
+            <Card className="bg-white w-[30rem]  max-md:w-[25rem]  h-[80vh] rounded-sm overflow-auto ">
               <div>
                 {/**header */}
                 <div className="sticky top-0 bg-white">
@@ -86,7 +86,7 @@ function teste() {
                       />
                     </div>
 
-                    <p className="text-sm">
+                    <p className="text-xs">
                       Veja os pedidos que estão sendo preparados para seus
                       clientes.
                     </p>
@@ -108,7 +108,7 @@ function teste() {
                 )}
               </div>
             </Card>
-            <Card className="bg-white-400 w-full h-[80vh] rounded-sm bg-white overflow-y-auto">
+            <Card className="bg-white-400 w-[30rem] max-md:w-[25rem] h-[80vh] rounded-sm bg-white overflow-y-auto">
               <div>
                 {/**header */}
                 <div className="bg-white sticky top-0">
@@ -121,7 +121,7 @@ function teste() {
                       <SiVerizon size={20} className="text-green-300" />
                     </div>
 
-                    <p className="text-sm">
+                    <p className="text-xs">
                       Pedidos prontos para serem retirados pelos garçons.
                     </p>
                   </div>

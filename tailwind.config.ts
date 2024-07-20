@@ -24,6 +24,9 @@ const config = {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        backgroundImage: {
+          'custom-gradient': 'linear-gradient(90deg, rgba(153,213,247,1) 0%, rgba(68,156,212,1) 100%)',
+        },
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
