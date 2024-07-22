@@ -26,12 +26,13 @@ import {
 } from "@/components/ui/dialog";
 import Header from "../_components/_header";
 import { Input } from "@/components/ui/input";
+import Image from "next/image";
 const Categories = () => {
   const { toast } = useToast();
   const [categoriesList, setCategoriesList] = useState([]);
   const [open, setOpen] = useState(false);
-  const [disabled,setDisabled] = useState(true)
-const [category,setCategory] = useState('')
+  const [disabled, setDisabled] = useState(true);
+  const [category, setCategory] = useState("");
   //busca as categorias da api
 
   async function getCategories() {
@@ -52,39 +53,37 @@ const [category,setCategory] = useState('')
     getCategories();
   }, []);
 
-
-  useEffect(()=> {
-    if(category!==''){
-      setDisabled(false)
-    }else{
-      setDisabled(true)
+  useEffect(() => {
+    if (category !== "") {
+      setDisabled(false);
+    } else {
+      setDisabled(true);
     }
-  },[category])
+  }, [category]);
 
-  async function AddCategory(){
-    if(category!==''){
-       const data = {
-      name:category
+  async function AddCategory() {
+    if (category !== "") {
+      const data = {
+        name: category,
+      };
+      const response = await api
+        .post(`/addCategory`, data)
+        .then((res) => {
+          toast({
+            title: "Uhu! nova categoria adicionada.",
+          });
+          setOpen(false);
+          setCategory("");
+          getCategories();
+        })
+        .catch((error) => {
+          toast({
+            title: "Erro ao adicionar categoria",
+            description: error,
+            variant: "destructive",
+          });
+        });
     }
-    const response  =  await api.post(`/addCategory`,data)
-    .then((res)=> {
-      toast({
-        title:'Uhu! nova categoria adicionada.',
-
-      })
-      setOpen(false)
-      setCategory('')
-      getCategories()
-    })
-    .catch((error)=> {
-      toast({
-        title: "Erro ao adicionar categoria",
-        description: error,
-        variant: "destructive",
-      });
-    })
-    }
-   
   }
 
   return (
@@ -99,47 +98,66 @@ const [category,setCategory] = useState('')
           <h1 className="font-semibold text-[1.2rem]">Categorias</h1>
           <Button
             className={`bg-[${Colors.blue}] hover:bg-blue-500 duration-300`}
-            onClick={()=> setOpen(true)}
+            onClick={() => setOpen(true)}
           >
             Nova categoria
           </Button>
         </div>
-        <div className="my-4">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Nome - Categoria</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              { categoriesList.length> 0 && categoriesList.map((item: { id: string; name: string }) => (
-                <TableRow key={item.id}>
-                  <TableCell>{item.name}</TableCell>
+
+        {categoriesList.length === 0 ? (
+          <div className="flex flex-col items-center mt-20">
+            <Image
+              src={"/caixa-vazia.png"}
+              width={120}
+              height={120}
+              alt="sem pedidos"
+              objectFit="cover"
+            />
+            <p className="text-sm">Sem categorias no momento!</p>
+          </div>
+        ) : (
+          <div className="my-4">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Nome - Categoria</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+              </TableHeader>
+              <TableBody>
+                {categoriesList.length > 0 &&
+                  categoriesList.map((item: { id: string; name: string }) => (
+                    <TableRow key={item.id}>
+                      <TableCell>{item.name}</TableCell>
+                    </TableRow>
+                  ))}
+              </TableBody>
+            </Table>
+          </div>
+        )}
       </div>
       <div className="flex items-center justify-center">
         <Dialog open={open} onOpenChange={setOpen}>
-          
           <DialogContent className="w-[80vw]">
-            <DialogHeader className='font-semibold'>Adicione uma nova categoria</DialogHeader>
-            <div className='flex flex-col  justify-center gap-2 w-full'>
+            <DialogHeader className="font-semibold">
+              Adicione uma nova categoria
+            </DialogHeader>
+            <div className="flex flex-col  justify-center gap-2 w-full">
               <div className="flex flex-col gap-1">
-                 <label>Categoria</label>
-              <Input
-              placeholder="Digite o nome da categoria"
-              value={category}
-              onChange={(e)=> setCategory(e.target.value)}
-              />
+                <label>Categoria</label>
+                <Input
+                  placeholder="Digite o nome da categoria"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                />
               </div>
-             
-              <Button className={`bg-[${Colors.blue}] mx-8`}
-              onClick={AddCategory}
-              disabled={disabled}
-              >Confirmar</Button>
+
+              <Button
+                className={`bg-[${Colors.blue}] mx-8`}
+                onClick={AddCategory}
+                disabled={disabled}
+              >
+                Confirmar
+              </Button>
             </div>
           </DialogContent>
         </Dialog>

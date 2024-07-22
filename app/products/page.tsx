@@ -184,7 +184,20 @@ await api.post('/addProduct', data)
             Novo produto
           </Button>
         </div>
-        <div className="my-4">
+        {
+
+          ProductsList.length===0?
+            <div className="flex flex-col items-center mt-20">
+            <Image
+              src={"/caixa-vazia.png"}
+              width={120}
+              height={120}
+              alt="sem pedidos"
+              objectFit="cover"
+            />
+            <p className="text-sm">Sem produtos no momento!</p>
+          </div>: 
+          <div className="my-4">
           <Table>
             <TableHeader>
               <TableRow>
@@ -219,6 +232,8 @@ await api.post('/addProduct', data)
             </TableBody>
           </Table>
         </div>
+        }
+        
       </div>
       <div className="flex items-center justify-center w-10">
         <Dialog open={open} onOpenChange={setOpen}  >

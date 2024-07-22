@@ -1,16 +1,15 @@
 import React from "react";
 import Header from "../_components/_header";
-import { RefreshCw, SearchIcon } from "lucide-react";
-import { Card } from "@/components/ui/card";
+import { CircleDollarSign, RefreshCw, SearchIcon, ShoppingBag } from "lucide-react";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { SiVerizon } from "react-icons/si";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import Image from "next/image";
 import Order from "../_components/_order";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-// import { Container } from './styles';
 
-function teste() {
+function Teste() {
   const pedidos = [
     {
       numeroMesa: 1,
@@ -45,37 +44,36 @@ function teste() {
   ];
 
   return (
-    <div className="w-full h-[100%] text-black bg-slate-100 ">
-        <head>
-            <title>Pedido Fácil - Dashboard</title>
-        </head>
-     <Header/>
-      <div className="max-md:mx-4 mx-20">
-        <div className="mx-4 mt-4 ">
+    <div className="w-full h-full text-black bg-slate-100">
+      <head>
+        <title>Pedido Fácil - Dashboard</title>
+      </head>
+      <Header />
+      <div className="max-md:mx-4 mx-20 flex">
+        <div className="mx-4 mt-4">
           <div className="flex items-center gap-2">
             <h1 className="font-semibold text-[1.2rem]">Meus Pedidos</h1>
             <RefreshCw
               size={20}
-              className="cursor-pointer hover:text-[#449cd4] hover:animate-spin duration-300 "
+              className="cursor-pointer hover:text-[#449cd4] hover:animate-spin duration-300"
             />
           </div>
           <div className="flex items-center gap-2">
-            <Input placeholder="Buscar pedido por mesa ou cliente..." 
-            className="max-w-[30rem]"
+            <Input
+              placeholder="Buscar pedido por mesa ou cliente..."
+              className="max-w-[30rem]"
             />
-            <Button size={'icon'} className="bg-[#449cd4]">
-              <SearchIcon />  
+            <Button size={"icon"} className="bg-[#449cd4]">
+              <SearchIcon />
             </Button>
-            
           </div>
 
-          <div className="my-4 flex   gap-10 max-md:flex-col ">
-            <Card className="bg-white w-[30rem]  max-md:w-[25rem]  h-[80vh] rounded-sm overflow-auto ">
+          <div className="my-4 flex gap-10 max-md:flex-col mx-4">
+            <Card className="bg-white w-full max-w-[30rem] h-[80vh] rounded-sm overflow-auto">
               <div>
-                {/**header */}
                 <div className="sticky top-0 bg-white">
-                  <div className="bg-amber-300 w-full h-2 rounded-t-sm border-b  items-center justify-center "></div>
-                  <div className="flex flex-col items-center mx-3  border-b py-2">
+                  <div className="bg-amber-300 w-full h-2 rounded-t-sm border-b items-center justify-center"></div>
+                  <div className="flex flex-col items-center mx-3 border-b py-2">
                     <div className="flex items-center gap-2">
                       <h2 className="font-semibold text-[1.2rem]">
                         Pedidos em preparo
@@ -85,7 +83,6 @@ function teste() {
                         className="text-amber-300"
                       />
                     </div>
-
                     <p className="text-xs">
                       Veja os pedidos que estão sendo preparados para seus
                       clientes.
@@ -93,7 +90,7 @@ function teste() {
                   </div>
                 </div>
                 {pedidos.length === 0 ? (
-                  <div className="flex flex-col items-center mt-20 ">
+                  <div className="flex flex-col items-center mt-20">
                     <Image
                       src={"/caixa-vazia.png"}
                       width={120}
@@ -108,19 +105,17 @@ function teste() {
                 )}
               </div>
             </Card>
-            <Card className="bg-white-400 w-[30rem] max-md:w-[25rem] h-[80vh] rounded-sm bg-white overflow-y-auto">
+            <Card className="bg-white w-full max-w-[30rem] h-[80vh] rounded-sm overflow-y-auto">
               <div>
-                {/**header */}
                 <div className="bg-white sticky top-0">
-                  <div className="bg-green-300 w-full h-2  rounded-t-sm border-b flex flex-col items-center justify-center "></div>
-                  <div className="flex flex-col items-center mx-3  border-b py-2">
+                  <div className="bg-green-300 w-full h-2 rounded-t-sm border-b flex flex-col items-center justify-center"></div>
+                  <div className="flex flex-col items-center mx-3 border-b py-2">
                     <div className="flex items-center gap-2">
                       <h2 className="font-semibold text-[1.2rem]">
                         Pedidos Concluídos
                       </h2>
                       <SiVerizon size={20} className="text-green-300" />
                     </div>
-
                     <p className="text-xs">
                       Pedidos prontos para serem retirados pelos garçons.
                     </p>
@@ -128,6 +123,32 @@ function teste() {
                 </div>
               </div>
             </Card>
+            <div className="flex flex-col gap-10 max-md:hidden">
+            <Card className="w-[20rem]">
+                <CardContent className="flex flex-col items-center  py-2 ">
+                  <div className="flex w-full justify-between ">
+                    <div>
+                     <h3 className={`text-[#449cd4] text-[2rem] font-semibold`}>205</h3>
+                    <p className="text-muted-foreground">Vendas nas útimas 24hrs</p>    
+                    </div>
+                 <ShoppingBag size={35} className="text-muted-foreground opacity-60"/>
+                  </div>
+
+                </CardContent>
+              </Card>
+              <Card className="w-[20rem]">
+                <CardContent className="flex flex-col items-center  py-2 ">
+                  <div className="flex w-full justify-between ">
+                    <div>
+                     <h3 className={`text-[#449cd4] text-[2rem] font-semibold`}>R$24560,00</h3>
+                    <p className="text-muted-foreground">Valor total nas útimas 24hrs</p>    
+                    </div>
+                 <CircleDollarSign size={35} className="text-muted-foreground opacity-60"/>
+                  </div>
+
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
       </div>
@@ -135,4 +156,4 @@ function teste() {
   );
 }
 
-export default teste;
+export default Teste;
