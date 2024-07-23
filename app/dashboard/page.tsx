@@ -1,4 +1,5 @@
-import React from "react";
+'use client'
+import React, { useEffect, useState } from "react";
 import Header from "../_components/_header";
 import { CircleDollarSign, RefreshCw, SearchIcon, ShoppingBag } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -8,46 +9,36 @@ import Image from "next/image";
 import Order from "../_components/_order";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-
+import { api } from "../services/apiClient";
+import { useToast } from "@/components/ui/use-toast";
+import { Toaster } from "@/components/ui/toaster";
 function Teste() {
-  const pedidos = [
-    {
-      numeroMesa: 1,
-      itens: [
-        { nome: "Hambúrguer", quantidade: 2, valorUnitario: 15.0 },
-        { nome: "Batata Frita", quantidade: 1, valorUnitario: 10.0 },
-        { nome: "Refrigerante", quantidade: 2, valorUnitario: 5.0 },
-      ],
-      nomeCliente: "João da Silva",
-      valorTotal: 50.0,
-    },
-    {
-      numeroMesa: 3,
-      itens: [
-        { nome: "Pizza", quantidade: 1, valorUnitario: 30.0 },
-        { nome: "Salada", quantidade: 1, valorUnitario: 10.0 },
-        { nome: "Suco", quantidade: 2, valorUnitario: 1.25 },
-      ],
-      nomeCliente: "Maria Oliveira",
-      valorTotal: 42.5,
-    },
-    {
-      numeroMesa: 2,
-      itens: [
-        { nome: "Sushi", quantidade: 3, valorUnitario: 12.0 },
-        { nome: "Sashimi", quantidade: 2, valorUnitario: 8.0 },
-        { nome: "Chá Verde", quantidade: 4, valorUnitario: 3.0 },
-      ],
-      nomeCliente: "Pedro Souza",
-      valorTotal: 65.0,
-    },
-  ];
+
+  const {toast} = useToast()
+const [orders,setOrders]= useState([])
+async function getOrders(){
+  await api('/orders')
+  .then((res)=> {
+    setOrders(res.data)
+  })
+  .catch((error)=> {
+toast({
+  title:'Erro ao buscar os pedidos',
+  variant:'destructive'
+})
+  })
+}
+
+useEffect(()=> {
+  getOrders()
+},[])
 
   return (
     <div className="w-full h-full text-black bg-slate-100">
       <head>
         <title>Pedido Fácil - Dashboard</title>
       </head>
+      <Toaster/>
       <Header />
       <div className="max-md:mx-4 mx-20 flex">
         <div className="mx-4 mt-4">
@@ -89,7 +80,7 @@ function Teste() {
                     </p>
                   </div>
                 </div>
-                {pedidos.length === 0 ? (
+                {orders.length === 0 ? (
                   <div className="flex flex-col items-center mt-20">
                     <Image
                       src={"/caixa-vazia.png"}
@@ -101,7 +92,7 @@ function Teste() {
                     <p className="text-sm">Sem pedidos no momento!</p>
                   </div>
                 ) : (
-                  <Order data={pedidos} />
+                  <Order data={orders} />
                 )}
               </div>
             </Card>

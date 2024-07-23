@@ -40,6 +40,7 @@ import {
 } from "@/components/ui/select";
 import CurrencyInput from "react-currency-input-field";
 import FormatCurrency from "../helpers/formatCurrency";
+import { Loader, LoaderCircle } from "lucide-react";
 const Products = () => {
   const { toast } = useToast();
   const [ProductsList, setProductsList] = useState([]);
@@ -53,6 +54,7 @@ const Products = () => {
   const [description,setDescription] = useState<string>('');
   const [categorySelect,setCategorySelect] = useState<string>('');
   const [name,setName] =  useState<string>('')
+  const [loading,setLoading] = useState(false)
   type ProductProps = {
     name: string;
     price: number;
@@ -121,7 +123,7 @@ const Products = () => {
   };
 
 useEffect(()=>{
-if(categorySelect!=='' && description!=='' && value!=='' && name!==''){
+if(categorySelect!==''  && value!=='' && name!==''){
   setDisabled(false)
 }else{
   setDisabled(true)
@@ -132,7 +134,8 @@ if(categorySelect!=='' && description!=='' && value!=='' && name!==''){
   async function addProduct(e: FormEvent){
     e.preventDefault()
     const formatNumber: string = value ? value.replace(',', '.') : '';
-    if(categorySelect!=='' && description!=='' && value!=='' && name!==''){
+    if(categorySelect!=='' && value!=='' && name!==''){
+      setLoading(true)
 const data = new FormData(); 
 
 data.append('name', name);
@@ -152,12 +155,18 @@ await api.post('/addProduct', data)
   })
   setOpen(false)
   getProducts()
+  setLoading(false)
+  setName('')
+  setValue('')
+  setCategorySelect('')
+  setDescription('')
 })
 .catch((error)=> {
   toast({
     title:'Opss! erro ao cadastrar produto',
     variant:'destructive'
   })
+  setLoading(false)
   console.log(error)
 })
 
@@ -236,8 +245,8 @@ await api.post('/addProduct', data)
         
       </div>
       <div className="flex items-center justify-center w-10">
-        <Dialog open={open} onOpenChange={setOpen}  >
-          <DialogContent className="w-[80vw]">
+        <Dialog open={open} onOpenChange={setOpen}   >
+          <DialogContent className="w-[80vw] h-[80vh]">
             <DialogHeader className="font-semibold">
               Adicione um novo produto
             </DialogHeader>
@@ -313,11 +322,16 @@ await api.post('/addProduct', data)
                   />
                 </div>
                 <Button
-                  className={`bg-[${Colors.blue}] mx-8`}
+                  className={`bg-[${Colors.blue}] mx-8 hover:bg-blue-600`}
                   disabled={disabled}
                   onClick={addProduct}
                 >
-                  Confirmar
+                  {
+                    loading?
+                    <LoaderCircle className='animate-spin'/> :
+                    'Confirmar'
+                  }
+                  
                 </Button>
               </form>
             </div>

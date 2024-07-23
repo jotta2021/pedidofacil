@@ -4,9 +4,10 @@ import { Card } from "@/components/ui/card"
 
 interface OrderProps {
     data: {
-        numeroMesa:number,
-        nomeCliente:string,
-        valorTotal:number
+        table:number,
+        name:string,
+        valorTotal:number,
+        id:string
     }[]
 }
 
@@ -24,20 +25,20 @@ const Order = ({data}: OrderProps) => {
             <p className='text-sm font-semibold'>Total de pedidos: {data.length}</p>
             {
                 data.map((item, index) => (
-                    <Card key={item.numeroMesa} className='bg-slate-50 p-2' >
+                    <Card key={item.id} className='bg-slate-50 p-2' >
                         <div className='flex  mx-3 my-2 justify-between border-b '>
 
-                            <h3 className='font-semibold' >Mesa {item.numeroMesa}</h3>
+                            <h3 className='font-semibold' >Mesa {item.table}</h3>
 
 
                             <EllipsisVertical size={20} className='text-slate-600 cursor-pointer' />
                         </div>
                         <div className='mx-3 '>
-                            <p className='text-xs'>Cliente: {item.nomeCliente}</p>
-                            <p className='font-semibold text-sm'>Total: {formatCurrency(item.valorTotal)}</p>
+                            <p className='text-xs'>Cliente: {item.name.toUpperCase()}</p>
+                            <p className='font-semibold text-sm'>Total: </p>
                         </div>
                         <div className='flex items-center justify-center my-4 w-full'>
-                            <Button className='w-full bg-[#449cd4]'>Concluir Pedido</Button>
+                            <Button className='w-full bg-[#449cd4] hover:bg-blue-600'>Concluir Pedido</Button>
                         </div>
 
                     </Card>

@@ -27,12 +27,14 @@ import {
 import Header from "../_components/_header";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
+import { LoaderCircle } from "lucide-react";
 const Categories = () => {
   const { toast } = useToast();
   const [categoriesList, setCategoriesList] = useState([]);
   const [open, setOpen] = useState(false);
   const [disabled, setDisabled] = useState(true);
   const [category, setCategory] = useState("");
+  const [loading,setLoading] = useState(false)
   //busca as categorias da api
 
   async function getCategories() {
@@ -66,6 +68,7 @@ const Categories = () => {
       const data = {
         name: category,
       };
+      setLoading(true)
       const response = await api
         .post(`/addCategory`, data)
         .then((res) => {
@@ -75,6 +78,7 @@ const Categories = () => {
           setOpen(false);
           setCategory("");
           getCategories();
+          setLoading(false)
         })
         .catch((error) => {
           toast({
@@ -82,6 +86,7 @@ const Categories = () => {
             description: error,
             variant: "destructive",
           });
+          setLoading(false)
         });
     }
   }
@@ -152,11 +157,16 @@ const Categories = () => {
               </div>
 
               <Button
-                className={`bg-[${Colors.blue}] mx-8`}
+                className={`bg-[${Colors.blue}] mx-8 hover:bg-blue-600`}
                 onClick={AddCategory}
                 disabled={disabled}
               >
-                Confirmar
+                {
+                  loading?
+                  <LoaderCircle className='animate-spin'/> :
+                  'Confirmar'
+                }
+                
               </Button>
             </div>
           </DialogContent>
