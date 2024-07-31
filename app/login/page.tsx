@@ -60,13 +60,13 @@ const Login = () => {
             >
               <div className="flex flex-col gap-5 w-full items-center px-8  ">
                 <Input
-                  placeholder="Digte seu email"
+                  placeholder="Digite seu email"
                   className="  rounded-sm max-w-[40rem] max-md:w-[25rem]"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
                 <Input
-                  placeholder="Diigte sua senha"
+                  placeholder="Digite sua senha"
                   className=" rounded-sm max-w-[40rem] max-md:w-[25rem]"
                   type="password"
                   value={password}
@@ -74,8 +74,8 @@ const Login = () => {
                 />
 
                 <Button
-                  className={`bg-[${Colors.blue}] hover:bg-blue-500 duration-300 rounded-sm w-[40rem] max-md:w-[25rem]`}
-                  onClick={handleLogin}
+                  className={`bg-[${Colors.blue}] hover:bg-blue-500 duration-300 rounded-sm w-full max-w-[40rem] max-md:w-[25rem]`}
+                  type="submit"
                 >
                   {loading ? (
                     <LoaderCircle className="animate-spin" />
@@ -97,7 +97,7 @@ const Login = () => {
 
       <div className={`w-[50vw] h-[100vh] bg-[${Colors.blue}] flex items-center justify-center max-lg:hidden px-3`} >
 
-<div className="flex flex-col items-center justify-center">
+<div className="flex flex-col items-center justify-center mx-3">
 <Image
                 src={"/pedido-online.png"}
                 alt="logo pedido facil"
@@ -105,8 +105,8 @@ const Login = () => {
                 height={200}
                 quality={100}
               />
-              <h2 className="text-white font-semibold text-[1.8rem]">Bem-vindo ao Gerenciador de Pedidos!</h2>
-              <p className="text-white ">Acesse seu painel para acompanhar pedidos, gerenciar produtos e otimizar o atendimento no seu restaurante.</p>
+              <h2 className="text-white font-semibold text-[1.8rem] text-center">Bem-vindo ao Gerenciador de Pedidos!</h2>
+              <p className="text-white text-center">Acesse seu painel para acompanhar pedidos, gerenciar produtos e otimizar o atendimento no seu restaurante.</p>
 </div>
       </div>
     </div>

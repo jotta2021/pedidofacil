@@ -85,7 +85,7 @@ function Register() {
                 />
 
                 <Button
-                  className={`bg-[${Colors.blue}] hover:bg-blue-500 duration-300 rounded-sm w-[40rem] max-md:w-[25rem]`}
+                className={`bg-[${Colors.blue}] hover:bg-blue-500 duration-300 rounded-sm w-full max-w-[40rem] max-md:w-[25rem]`}
                   onClick={handleRegister}
                 >
                   {loading ? (
@@ -106,25 +106,19 @@ function Register() {
         </div>
       </div>
 
-      <div
-        className={`w-[50vw] h-[100vh] bg-[${Colors.blue}] flex items-center justify-center max-lg:hidden px-3`}
-      >
-        <div className="flex flex-col items-center justify-center">
-          <Image
-            src={"/pedido-online.png"}
-            alt="logo pedido facil"
-            width={200}
-            height={200}
-            quality={100}
-          />
-          <h2 className="text-white font-semibold text-[1.8rem]">
-            Bem-vindo ao Gerenciador de Pedidos!
-          </h2>
-          <p className="text-white ">
-            Acesse seu painel para acompanhar pedidos, gerenciar produtos e
-            otimizar o atendimento no seu restaurante.
-          </p>
-        </div>
+      <div className={`w-[50vw] h-[100vh] bg-[${Colors.blue}] flex items-center justify-center max-lg:hidden px-3`} >
+
+<div className="flex flex-col items-center justify-center mx-3">
+<Image
+                src={"/pedido-online.png"}
+                alt="logo pedido facil"
+                width={200}
+                height={200}
+                quality={100}
+              />
+              <h2 className="text-white font-semibold text-[1.8rem] text-center">Bem-vindo ao Gerenciador de Pedidos!</h2>
+              <p className="text-white text-center">Acesse seu painel para acompanhar pedidos, gerenciar produtos e otimizar o atendimento no seu restaurante.</p>
+</div>
       </div>
     </div>
   );
