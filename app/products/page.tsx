@@ -41,6 +41,8 @@ import {
 import CurrencyInput from "react-currency-input-field";
 import FormatCurrency from "../helpers/formatCurrency";
 import { Loader, LoaderCircle } from "lucide-react";
+import LoaderModal from "../_components/loaderModal";
+
 const Products = () => {
   const { toast } = useToast();
   const [ProductsList, setProductsList] = useState([]);
@@ -55,6 +57,7 @@ const Products = () => {
   const [categorySelect,setCategorySelect] = useState<string>('');
   const [name,setName] =  useState<string>('')
   const [loading,setLoading] = useState(false)
+  const [loadingProducts,setLoadingProducts] = useState(false)
   type ProductProps = {
     name: string;
     price: number;
@@ -72,18 +75,20 @@ const Products = () => {
   };
   //busca as categorias da api
   async function getProducts() {
+    setLoadingProducts(true)
     await api
       .get("/products")
       .then((res) => {
         setProductsList(res.data);
         console.log(res.data);
+        setLoadingProducts(false)
       })
       .catch((error) => {
         toast({
           title: "Erro ao buscar produtos do cardápio",
           variant: "destructive",
         });
-        console.log(error);
+       setLoadingProducts(false)
       });
   }
 
@@ -245,8 +250,11 @@ await api.post('/addProduct', data)
         
       </div>
       <div className="flex items-center justify-center w-10">
-        <Dialog open={open} onOpenChange={setOpen}   >
-          <DialogContent className="w-[80vw] h-[80vh]">
+
+
+
+        <Dialog open={open} onOpenChange={setOpen}    >
+          <DialogContent className="w-[80vw] h-[80vh] overflow-y-auto">
             <DialogHeader className="font-semibold">
               Adicione um novo produto
             </DialogHeader>
@@ -338,6 +346,13 @@ await api.post('/addProduct', data)
           </DialogContent>
         </Dialog>
       </div>
+
+      <Dialog open={loadingProducts}  >
+        
+        <DialogContent className="w-auto">
+          <LoaderModal textLoad="Buscando seus produtos..."/>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

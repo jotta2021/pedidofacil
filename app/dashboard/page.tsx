@@ -12,27 +12,33 @@ import { Button } from "@/components/ui/button";
 import { api } from "../services/apiClient";
 import { useToast } from "@/components/ui/use-toast";
 import { Toaster } from "@/components/ui/toaster";
+import LoaderModal from "../_components/loaderModal";
+import { Dialog,DialogClose,DialogContent } from "@/components/ui/dialog";
 function Teste() {
 
   const {toast} = useToast()
 const [orders,setOrders]= useState([])
+const [loading,setLoading] = useState(false)
 async function getOrders(){
+  setLoading(true)
   await api('/orders')
   .then((res)=> {
     setOrders(res.data)
+    setLoading(false)
   })
   .catch((error)=> {
 toast({
   title:'Erro ao buscar os pedidos',
   variant:'destructive'
 })
+setLoading(false)
   })
 }
 
 useEffect(()=> {
   getOrders()
 },[])
-
+console.log('orders', orders)
   return (
     <div className="w-full h-full text-black bg-slate-100">
       <head>
@@ -143,6 +149,13 @@ useEffect(()=> {
           </div>
         </div>
       </div>
+
+      <Dialog open={loading}  >
+        
+        <DialogContent className="w-auto">
+          <LoaderModal textLoad="Buscando pedidos..."/>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

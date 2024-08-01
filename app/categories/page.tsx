@@ -28,6 +28,7 @@ import Header from "../_components/_header";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { LoaderCircle } from "lucide-react";
+import LoaderModal from "../_components/loaderModal";
 const Categories = () => {
   const { toast } = useToast();
   const [categoriesList, setCategoriesList] = useState([]);
@@ -35,13 +36,16 @@ const Categories = () => {
   const [disabled, setDisabled] = useState(true);
   const [category, setCategory] = useState("");
   const [loading,setLoading] = useState(false)
+  const [loaderNew,setLoaderNew] = useState(false)
   //busca as categorias da api
 
   async function getCategories() {
+    setLoading(true)
     await api
       .get("/categories")
       .then((res) => {
         setCategoriesList(res.data);
+        setLoading(false)
       })
       .catch((error) => {
         toast({
@@ -49,6 +53,7 @@ const Categories = () => {
           description: error,
           variant: "destructive",
         });
+        setLoading(false)
       });
   }
   useEffect(() => {
@@ -68,7 +73,7 @@ const Categories = () => {
       const data = {
         name: category,
       };
-      setLoading(true)
+      setLoaderNew(true)
       const response = await api
         .post(`/addCategory`, data)
         .then((res) => {
@@ -78,7 +83,7 @@ const Categories = () => {
           setOpen(false);
           setCategory("");
           getCategories();
-          setLoading(false)
+          setLoaderNew(false)
         })
         .catch((error) => {
           toast({
@@ -86,7 +91,7 @@ const Categories = () => {
             description: error,
             variant: "destructive",
           });
-          setLoading(false)
+          setLoaderNew(false)
         });
     }
   }
@@ -162,7 +167,7 @@ const Categories = () => {
                 disabled={disabled}
               >
                 {
-                  loading?
+                  loaderNew?
                   <LoaderCircle className='animate-spin'/> :
                   'Confirmar'
                 }
@@ -172,6 +177,13 @@ const Categories = () => {
           </DialogContent>
         </Dialog>
       </div>
+
+      <Dialog open={loading}  >
+        
+        <DialogContent className="w-auto">
+          <LoaderModal textLoad="Buscando categorias..."/>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
