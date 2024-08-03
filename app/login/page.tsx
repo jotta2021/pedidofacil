@@ -40,9 +40,9 @@ const Login = () => {
         <title>Pedido Fácil - Faça seu login</title>
       </head>
 
-      <div className=" w-[50vw] h-[100vh] flex flex-col justify-center">
+      <div className=" w-[50vw] max-lg:w-full h-[100vh] flex flex-col justify-center">
         <div>
-          <div className=" flex flex-col">
+          <div className=" flex flex-col mx-32 max-md:mx-8">
             <div className="flex flex-col items-center justify-center my-4">
               <Image
                 src={"/logo.png"}
@@ -55,26 +55,26 @@ const Login = () => {
             </div>
 
             <form
-              className=" flex flex-col items-center "
+              className=" flex flex-col   w-full"
               onSubmit={handleLogin}
             >
-              <div className="flex flex-col gap-5 w-full items-center px-8  ">
+              <div className="flex flex-col gap-5 w-full ">
                 <Input
                   placeholder="Digite seu email"
-                  className="  rounded-sm max-w-[40rem] max-md:w-[25rem]"
+                  className="  rounded-sm w-full "
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
                 <Input
                   placeholder="Digite sua senha"
-                  className=" rounded-sm max-w-[40rem] max-md:w-[25rem]"
+                  className=" rounded-sm  w-full"
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
 
                 <Button
-                  className={`bg-[${Colors.blue}] hover:bg-blue-500 duration-300 rounded-sm w-full max-w-[40rem] max-md:w-[25rem]`}
+                  className={`bg-[${Colors.blue}] hover:bg-blue-500 duration-300 rounded-sm w-full `}
                   type="submit"
                 >
                   {loading ? (
@@ -83,14 +83,15 @@ const Login = () => {
                     " Login"
                   )}
                 </Button>
-                <p className="text-center text-sm">
+                
+              </div>
+            </form>
+            <p className="text-center text-sm mt-4">
                   Ainda não possui uma conta?{" "}
                   <Link href={"/register"} className="font-semibold">
                     Cadastre-se
                   </Link>
                 </p>
-              </div>
-            </form>
           </div>
         </div>
       </div>

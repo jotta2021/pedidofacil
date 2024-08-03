@@ -30,6 +30,11 @@ interface orderDetail {
     product:{
         name: string,
         price: number
+    },
+    order:{
+        created_at: Date,
+        name:string,
+        table:number
     }
 }
 
@@ -41,6 +46,7 @@ const Order = ({data}: OrderProps, {id,amoun,product} : orderDetail) => {
 
 const [openDialog,setOpenDialog] = useState(false)
 const [orderDetail,setOrderDetails] = useState<orderDetail[]>([]);
+const [selectOrder,setSelectOrder]= useState([])
 const {toast} = useToast()
     const formatCurrency = (value: number) => {
         const formatNumber = Intl.NumberFormat('pt-BR', {
@@ -51,8 +57,9 @@ const {toast} = useToast()
     }
 
 // busca os detalhes do pedido de acordo com o is
-async function getDetailsOrder(){
-    await api.get(`orderDetail?order_id=${data[0].id}`)
+async function getDetailsOrder(id: string){
+    console.log(`orderDetail?order_id=${id}`)
+    await api.get(`orderDetail?order_id=${id}`)
     .then((res)=> {
 setOrderDetails(res.data)
     })
@@ -63,10 +70,7 @@ toast({
 })
     })
 }
-useEffect(()=> {
 
-    getDetailsOrder()
-},[data])
 
 // funcao para calcular o valor total dos itens da mesa
 const calculateTotal = (items:orderDetail[]) => {
@@ -94,7 +98,9 @@ const FormatDate = (value : Date) => {
                             <h3 className='font-semibold' >Mesa {item.table}</h3>
 <Popover>
     <PopoverTrigger>
-        <Button size={'icon'} variant={'ghost'}><EllipsisVertical size={20} className='text-slate-600 cursor-pointer' /></Button>
+        <Button size={'icon'} variant={'ghost'}
+        onClick={()=> getDetailsOrder(item.id)}
+        ><EllipsisVertical size={20} className='text-slate-600 cursor-pointer' /></Button>
     </PopoverTrigger>
     <PopoverContent>
       
@@ -121,17 +127,22 @@ const FormatDate = (value : Date) => {
 
 <Dialog open={openDialog} onOpenChange={setOpenDialog}>
 <DialogContent className="w-[60vw] h-auto">
-    <DialogHeader 
-    className="font-semibold text-[1.2rem] border-b">Detalhes do pedido  -  Mesa {data[0].table}
-       <p className="text-sm"> Realizado em: {FormatDate(data[0].created_at)}</p>
-       <p className="text-sm">Cliente: {data[0].name}</p>
-    </DialogHeader>
+   
 <div className="">
  
     {orderDetail.map((item: orderDetail)=> (
-        <div key={item.id} className="flex gap-2 ">
+        <div key={item.id}>
+ <DialogHeader 
+    className="font-semibold text-[1.2rem] border-b py-4">Detalhes do pedido  -  Mesa {item.order.table}
+       <p className="text-sm"> Realizado em: {FormatDate(item.order.created_at)}</p>
+       <p className="text-sm">Cliente: {item.order.name}</p>
+    </DialogHeader>
+        
+        <div  className="flex gap-2 ">
 <p>{item.amoun}-</p>
 <p>{item.product.name} ({formatCurrency(item.product.price) } UN)</p>
+        </div>
+        
         </div>
     ))}
 

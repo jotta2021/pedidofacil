@@ -14,11 +14,13 @@ import { useToast } from "@/components/ui/use-toast";
 import { Toaster } from "@/components/ui/toaster";
 import LoaderModal from "../_components/loaderModal";
 import { Dialog,DialogClose,DialogContent } from "@/components/ui/dialog";
+import Charts from "./chart";
 function Teste() {
 
   const {toast} = useToast()
 const [orders,setOrders]= useState([])
 const [loading,setLoading] = useState(false)
+const now = new Date()
 async function getOrders(){
   setLoading(true)
   await api('/orders')
@@ -38,7 +40,33 @@ setLoading(false)
 useEffect(()=> {
   getOrders()
 },[])
-console.log('orders', orders)
+
+
+
+
+// funcao para buscar novos pedidos de 30 em 30 segundos
+
+useEffect(()=> {
+setInterval(()=> {
+  getOrders()
+},30000)
+
+},[])
+
+// funcao para calcular todas as vendas nas ultimas 24 horas.
+//pega a quantidade total de pedidos nas ultimas 24 horas
+
+const vendasUltimas24Horas = orders.filter(orders => {
+  const createdAt = new Date(orders?.created_at);
+  const diff = now.getTime() - createdAt.getTime();
+  const diffHours = diff / (1000 * 60 * 60);
+  return diffHours <= 24;
+});
+
+// Número de vendas nas últimas 24 horas
+const numberOrders = vendasUltimas24Horas.length;
+
+
   return (
     <div className="w-full h-full text-black bg-slate-100">
       <head>
@@ -125,7 +153,7 @@ console.log('orders', orders)
                 <CardContent className="flex flex-col items-center  py-2 ">
                   <div className="flex w-full justify-between ">
                     <div>
-                     <h3 className={`text-[#449cd4] text-[2rem] font-semibold`}>205</h3>
+                     <h3 className={`text-[#449cd4] text-[2rem] font-semibold`}>{numberOrders}</h3>
                     <p className="text-muted-foreground">Vendas nas útimas 24hrs</p>    
                     </div>
                  <ShoppingBag size={35} className="text-muted-foreground opacity-60"/>
@@ -143,6 +171,12 @@ console.log('orders', orders)
                  <CircleDollarSign size={35} className="text-muted-foreground opacity-60"/>
                   </div>
 
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent>
+                  <Charts/>
                 </CardContent>
               </Card>
             </div>

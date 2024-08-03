@@ -46,9 +46,9 @@ function Register() {
         <title>Pedido Fácil - Cadastro</title>
       </head>
       <Toaster />
-      <div className=" w-[50vw] h-[100vh] flex flex-col justify-center">
+      <div className=" w-[50vw] h-[100vh] max-lg:w-full flex flex-col justify-center">
         <div className=" w-full h-[100vh] flex flex-col justify-center">
-          <div className=" flex flex-col">
+          <div className=" flex flex-col mx-32 max-md:mx-8">
             <div className="flex flex-col items-center justify-center my-4 ">
               <Image
                 src={"/logo.png"}
@@ -67,25 +67,25 @@ function Register() {
               <div className="flex flex-col gap-5 w-full items-center px-8  ">
                 <Input
                   placeholder="Diigte seu nome"
-                  className=" rounded-sm max-w-[40rem] max-md:w-[25rem]"
+                  className=" rounded-sm w-full"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
                 <Input
                   placeholder="Diigte seu email"
-                  className=" rounded-sm max-w-[40rem] max-md:w-[25rem]"
+                  className=" rounded-sm w-full"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
                 <Input
                   placeholder="Diigte sua senha"
-                  className=" rounded-sm max-w-[40rem] max-md:w-[25rem]"
+                  className=" rounded-sm w-full"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
 
                 <Button
-                className={`bg-[${Colors.blue}] hover:bg-blue-500 duration-300 rounded-sm w-full max-w-[40rem] max-md:w-[25rem]`}
+                className={`bg-[${Colors.blue}] hover:bg-blue-500 duration-300 rounded-sm w-full `}
                   onClick={handleRegister}
                 >
                   {loading ? (
