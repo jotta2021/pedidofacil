@@ -9,6 +9,7 @@ import Colors from "../../lib/colors.json";
 import { useToast } from "@/components/ui/use-toast";
 import { Toaster } from "@/components/ui/toaster";
 import { LoaderCircle } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 // import { Container } from './styles';
 
 function Register() {
@@ -41,85 +42,81 @@ function Register() {
   }
 
   return (
-    <div className="bg-white w-full flex max-lg:flex-col  max-lg:items-center">
-      <head>
-        <title>Pedido Fácil - Cadastro</title>
-      </head>
+    <div className={`bg-[${Colors.blue}] w-full h-screen flex flex-col items-center justify-center`}
+
+    >
       <Toaster />
-      <div className=" w-[50vw] h-[100vh] max-lg:w-full flex flex-col justify-center">
-        <div className=" w-full h-[100vh] flex flex-col justify-center">
-          <div className=" flex flex-col mx-32 max-md:mx-8">
-            <div className="flex flex-col items-center justify-center my-4 ">
+      <head>
+        <title>Pedido Fácil - Faça seu login</title>
+      </head>
+
+
+
+      <Card className="w-[40%] max-md:w-[80%]  flex flex-col  items-center justify-center  px-4">
+        <CardContent className="w-full">
+          <div className="flex flex-col items-center justify-center my-4">
+            <div className="flex flex-col items-center justify-center my-4">
               <Image
-                src={"/logo.png"}
-                alt="logo pedido facil"
-                width={200}
-                height={200}
-                quality={100}
-              />
-              <h2 className="font-semibold text-lg">Crie sua conta</h2>
-            </div>
-
-            <form
-              className=" flex flex-col items-center "
-              onSubmit={handleRegister}
-            >
-              <div className="flex flex-col gap-5 w-full items-center px-8  ">
-                <Input
-                  placeholder="Diigte seu nome"
-                  className=" rounded-sm w-full"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-                <Input
-                  placeholder="Diigte seu email"
-                  className=" rounded-sm w-full"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-                <Input
-                  placeholder="Diigte sua senha"
-                  className=" rounded-sm w-full"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-
-                <Button
-                className={`bg-[${Colors.blue}] hover:bg-blue-500 duration-300 rounded-sm w-full `}
-                  onClick={handleRegister}
-                >
-                  {loading ? (
-                    <LoaderCircle className="animate-spin" />
-                  ) : (
-                    "Cadastrar"
-                  )}
-                </Button>
-                <p className=" text-center text-sm">
-                  Já possui uma conta?{" "}
-                  <Link href={"/login"} className="font-semibold">
-                    Entre agora
-                  </Link>
-                </p>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-
-      <div className={`w-[50vw] h-[100vh] bg-[${Colors.blue}] flex items-center justify-center max-lg:hidden px-3`} >
-
-<div className="flex flex-col items-center justify-center mx-3">
-<Image
                 src={"/pedido-online.png"}
                 alt="logo pedido facil"
-                width={200}
-                height={200}
+                width={100}
+                height={100}
                 quality={100}
               />
-              <h2 className="text-white font-semibold text-[1.8rem] text-center">Bem-vindo ao Gerenciador de Pedidos!</h2>
-              <p className="text-white text-center">Acesse seu painel para acompanhar pedidos, gerenciar produtos e otimizar o atendimento no seu restaurante.</p>
-</div>
-      </div>
+              <p>Bem vindo ao Pedido Fácil</p>
+            </div>
+
+
+            <h2 className="font-semibold text-lg">Cadastro de usuário</h2>
+          </div>
+
+          <form
+            className=" flex flex-col   w-full"
+            onSubmit={handleRegister}
+          >
+            <div className="flex flex-col gap-5 w-full ">
+              <Input
+                placeholder="Digite seu nome"
+                className="  rounded-sm w-full "
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+              <Input
+                placeholder="Digite seu email"
+                className="  rounded-sm w-full "
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <Input
+                placeholder="Crie uma senha"
+                className=" rounded-sm  w-full"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+
+              <Button
+                className={`bg-[${Colors.blue}] hover:bg-blue-500 duration-300 rounded-sm w-full `}
+                type="submit"
+              >
+                {loading ? (
+                  <LoaderCircle className="animate-spin" />
+                ) : (
+                  " Criar conta"
+                )}
+              </Button>
+
+            </div>
+          </form>
+          <p className="text-center text-sm mt-4">
+            Já possui uma conta?{" "}
+            <Link href={"/login"} className="font-semibold">
+              Entrar agora mesmo
+            </Link>
+          </p>
+        </CardContent>
+
+      </Card>
     </div>
   );
 }

@@ -21,7 +21,7 @@ interface OrderProps {
         table:number,
         name:string,
         id:string,
-        created_at:Date
+        created_at:string
     }[]
 }
 interface orderDetail {
@@ -32,9 +32,11 @@ interface orderDetail {
         price: number
     },
     order:{
-        created_at: Date,
+        created_at: string,
         name:string,
         table:number
+        id: number;
+      
     }
 }
 
@@ -134,7 +136,7 @@ const FormatDate = (value : Date) => {
         <div key={item.id}>
  <DialogHeader 
     className="font-semibold text-[1.2rem] border-b py-4">Detalhes do pedido  -  Mesa {item.order.table}
-       <p className="text-sm"> Realizado em: {FormatDate(item.order.created_at)}</p>
+ <p className="text-sm">Realizado em: {FormatDate(new Date(item.order.created_at))}</p>
        <p className="text-sm">Cliente: {item.order.name}</p>
     </DialogHeader>
         

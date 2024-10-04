@@ -15,10 +15,22 @@ import { Toaster } from "@/components/ui/toaster";
 import LoaderModal from "../_components/loaderModal";
 import { Dialog,DialogClose,DialogContent } from "@/components/ui/dialog";
 import Charts from "./chart";
+
+interface Order {
+  id: string;
+  created_at: string; // ou Date, dependendo de como você quer trabalhar com isso
+  table: number;
+   name: string;
+    
+   
+  // adicione outras propriedades que você espera
+}
+
+
 function Teste() {
 
   const {toast} = useToast()
-const [orders,setOrders]= useState([])
+const [orders,setOrders]= useState<Order[]>([])
 const [loading,setLoading] = useState(false)
 const now = new Date()
 async function getOrders(){
@@ -94,6 +106,43 @@ const numberOrders = vendasUltimas24Horas.length;
           </div>
 
           <div className="my-4 flex gap-10 max-md:flex-col mx-4">
+
+          <Card className="bg-white w-full max-w-[30rem] h-[80vh] rounded-sm overflow-auto">
+              <div>
+                <div className="sticky top-0 bg-white">
+                  <div className="bg-[#5bc0de] w-full h-2 rounded-t-sm border-b items-center justify-center"></div>
+                  <div className="flex flex-col items-center mx-3 border-b py-2">
+                    <div className="flex items-center gap-2">
+                      <h2 className="font-semibold text-[1.2rem]">
+                        Pedidos em Aberto
+                      </h2>
+                      <AiOutlineLoading3Quarters
+                        size={20}
+                        className="text-[#5bc0de]"
+                      />
+                    </div>
+                    <p className="text-xs">
+                     Os pedidos recebidos serão mostrados aqui.
+                    </p>
+                  </div>
+                </div>
+                {orders.length === 0 ? (
+                  <div className="flex flex-col items-center mt-20">
+                    <Image
+                      src={"/caixa-vazia.png"}
+                      width={120}
+                      height={120}
+                      alt="sem pedidos"
+                      objectFit="cover"
+                    />
+                    <p className="text-sm">Sem pedidos no momento!</p>
+                  </div>
+                ) : (
+                  <Order data={orders} />
+                )}
+              </div>
+            </Card>
+
             <Card className="bg-white w-full max-w-[30rem] h-[80vh] rounded-sm overflow-auto">
               <div>
                 <div className="sticky top-0 bg-white">
