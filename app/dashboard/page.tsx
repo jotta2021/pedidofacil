@@ -90,10 +90,7 @@ const numberOrders = vendasUltimas24Horas.length;
         <div className="mx-4 mt-4">
           <div className="flex items-center gap-2">
             <h1 className="font-semibold text-[1.2rem]">Meus Pedidos</h1>
-            <RefreshCw
-              size={20}
-              className="cursor-pointer hover:text-[#449cd4] hover:animate-spin duration-300"
-            />
+          
           </div>
           <div className="flex items-center gap-2">
             <Input
@@ -107,57 +104,21 @@ const numberOrders = vendasUltimas24Horas.length;
 
           <div className="my-4 flex gap-10 max-md:flex-col mx-4">
 
-          <Card className="bg-white w-full max-w-[30rem] h-[80vh] rounded-sm overflow-auto">
-              <div>
-                <div className="sticky top-0 bg-white">
-                  <div className="bg-[#5bc0de] w-full h-2 rounded-t-sm border-b items-center justify-center"></div>
-                  <div className="flex flex-col items-center mx-3 border-b py-2">
-                    <div className="flex items-center gap-2">
-                      <h2 className="font-semibold text-[1.2rem]">
-                        Pedidos em Aberto
-                      </h2>
-                      <AiOutlineLoading3Quarters
-                        size={20}
-                        className="text-[#5bc0de]"
-                      />
-                    </div>
-                    <p className="text-xs">
-                     Os pedidos recebidos serão mostrados aqui.
-                    </p>
-                  </div>
-                </div>
-                {orders.length === 0 ? (
-                  <div className="flex flex-col items-center mt-20">
-                    <Image
-                      src={"/caixa-vazia.png"}
-                      width={120}
-                      height={120}
-                      alt="sem pedidos"
-                      objectFit="cover"
-                    />
-                    <p className="text-sm">Sem pedidos no momento!</p>
-                  </div>
-                ) : (
-                  <Order data={orders} />
-                )}
-              </div>
-            </Card>
+         
 
-            <Card className="bg-white w-full max-w-[30rem] h-[80vh] rounded-sm overflow-auto">
+            <Card className="bg-white w-full max-w-[30rem] h-[80vh] rounded-sm overflow-auto px-0">
               <div>
                 <div className="sticky top-0 bg-white">
-                  <div className="bg-amber-300 w-full h-2 rounded-t-sm border-b items-center justify-center"></div>
-                  <div className="flex flex-col items-center mx-3 border-b py-2">
+                  <div className="flex flex-col items-center border-b py-2 bg-amber-300 text-white">
                     <div className="flex items-center gap-2">
                       <h2 className="font-semibold text-[1.2rem]">
                         Pedidos em preparo
                       </h2>
-                      <AiOutlineLoading3Quarters
-                        size={20}
-                        className="text-amber-300"
-                      />
+                     <div className="bg-white w-6 h-6 flex items-center justify-center  rounded-full text-black">
+                    <p>{orders.length}</p>
+                     </div>
                     </div>
-                    <p className="text-xs">
+                    <p className="text-xs text-center">
                       Veja os pedidos que estão sendo preparados para seus
                       clientes.
                     </p>
@@ -210,7 +171,8 @@ const numberOrders = vendasUltimas24Horas.length;
 
                 </CardContent>
               </Card>
-              <Card className="w-[20rem]">
+
+              {/** <Card className="w-[20rem]">
                 <CardContent className="flex flex-col items-center  py-2 ">
                   <div className="flex w-full justify-between ">
                     <div>
@@ -221,13 +183,10 @@ const numberOrders = vendasUltimas24Horas.length;
                   </div>
 
                 </CardContent>
-              </Card>
+              </Card> */}
+             
 
-              <Card>
-                <CardContent>
-                  <Charts/>
-                </CardContent>
-              </Card>
+            
             </div>
           </div>
         </div>
