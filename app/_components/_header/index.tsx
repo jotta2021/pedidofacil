@@ -5,7 +5,7 @@ import { Pizza } from 'lucide-react';
 import Link from "next/link";
 const Header = () => {
     return ( 
-        <div className='w-full flex justify-between px-4 items-center max-h-14 border-b sticky top-0 bg-white z-50 '>
+        <div className='w-full flex justify-between px-4 items-center py-2 border-b sticky top-0 bg-white z-50 '>
         <Image
             src={"/pedido-online.png"}
             width={30}

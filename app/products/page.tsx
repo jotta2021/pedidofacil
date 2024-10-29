@@ -62,6 +62,7 @@ const Products = () => {
   const [loading, setLoading] = useState(false);
   const [loadingProducts, setLoadingProducts] = useState(false);
   const [search, setSearch] = useState("");
+  const [selectProduct,setSelectProduct] = useState<ProductProps|null>(null);
   type ProductProps = {
     name: string;
     price: number;
@@ -70,6 +71,7 @@ const Products = () => {
     description: string;
     category: {
       name: string;
+      id:string;
     };
   };
 
@@ -116,7 +118,8 @@ const Products = () => {
   }, []);
 
  // funcao para buscar produtos
- async function SearchProducts(){
+ async function SearchProducts(e: FormEvent){
+  e.preventDefault()
 const filteredItems = ProductsList.filter((item)=> item?.name.toUpperCase().includes(search.toUpperCase()))
 if(filteredItems.length>0){
   setFilteredList(filteredItems)
@@ -185,6 +188,8 @@ if(filteredItems.length>0){
           setValue("");
           setCategorySelect("");
           setDescription("");
+          setImageFile(null);
+          setImageUrl('')
         })
         .catch((error) => {
           toast({
@@ -200,6 +205,94 @@ if(filteredItems.length>0){
       });
     }
   }
+
+
+  async function UpdateProduct(e: FormEvent) {
+    e.preventDefault();
+    const formatNumber: string = value ? value.replace(",", ".") : "";
+    if (categorySelect !== "" && value !== "" && name !== "") {
+      setLoading(true);
+      const data = new FormData();
+
+      data.append("name", name);
+      data.append("price", formatNumber);
+      data.append("category_id", categorySelect);
+      if (imageFile) {
+        data.append("file", imageFile);
+      }else{
+        data.append("banner", selectProduct?.banner)
+      }
+      data.append("description", description);
+
+      console.log(data);
+      await api
+        .post(`/updateProduct?id=${selectProduct?.id}`, data)
+        .then((res) => {
+          toast({
+            title: "Obaa!  produto atualizado",
+          });
+          setOpen(false);
+          getProducts();
+          setLoading(false);
+          setName("");
+          setValue("");
+          setCategorySelect("");
+          setDescription("");
+          setImageFile(null);
+          setImageUrl('')
+        })
+        .catch((error) => {
+          toast({
+            title: "Opss! erro ao atualizar produto",
+            variant: "destructive",
+          });
+          setLoading(false);
+          console.log(error);
+        });
+    } else {
+      toast({
+        title: "Preencha os campos vazios ",
+      });
+    }
+  }
+async function DeleteProduct(id:string){
+  await api.delete(`/product/delete?id=${id}`)
+  .then((res)=> {
+    toast({
+      title:'Produto deletado',
+      variant:'default'
+    })
+    getProducts()
+  })
+  .catch((error) => {
+    toast({
+      title: "Opss! erro ao deletar produto",
+      variant: "destructive",
+    });
+   console.log(error)
+  });
+}
+
+// se tiver um produto selecionado
+//preenche todos os campos
+
+useEffect(()=> {
+if(selectProduct && categoriesList.length>0){
+  setName(selectProduct.name)
+  setCategorySelect(selectProduct.category.id)
+  setValue(selectProduct.price.toString())
+  setDescription(selectProduct.description)
+
+}else{
+  setName('')
+  setCategorySelect('')
+  setValue('')
+  setDescription('')
+  
+}
+
+},[selectProduct, categoriesList])
+
   return (
     <div className="w-full h-screen ">
       <Toaster />
@@ -212,17 +305,23 @@ if(filteredItems.length>0){
           <h1 className="font-semibold text-[1.2rem]">Cardápio</h1>
           <Button
             className={`bg-[${Colors.blue}] hover:bg-blue-500 duration-300`}
-            onClick={() => setOpen(true)}
+            onClick={() =>{setOpen(true)
+
+              setSelectProduct(null)
+            } }
           >
             Novo produto
           </Button>
         </div>
 
         {/** campo de pesquisa */}
-        <SearchComponent search={search} setSearch={setSearch} onClick={SearchProducts} />
+        <form onSubmit={SearchProducts}>
+           <SearchComponent search={search} setSearch={setSearch} onClick={()=> SearchProducts} />
 
+        </form>
+       
         {filteredList.length === 0 ? (
-          <div className="flex flex-col items-center mt-20">
+          <div className="flex flex-col items-center justify-center h-full">
             <Image
               src={"/caixa-vazia.png"}
               width={120}
@@ -234,7 +333,7 @@ if(filteredItems.length>0){
           </div>
         ) : (
           <div className="my-4">
-          <TableProducts  ProductsProps={filteredList}/>
+          <TableProducts  ProductsProps={filteredList} DeleteProduct={DeleteProduct} selectProduct={selectProduct} setSelectProduct={setSelectProduct} setOpen={setOpen} />
           </div>
         )}
       </div>
@@ -318,10 +417,11 @@ if(filteredItems.length>0){
                     onChange={(e) => setDescription(e.target.value)}
                   />
                 </div>
+                
                 <Button
                   className={`bg-[${Colors.blue}] mx-8 hover:bg-blue-600`}
                   disabled={disabled}
-                  onClick={addProduct}
+                  onClick={(e)=>selectProduct? UpdateProduct(e) :addProduct(e)}
                 >
                   {loading ? (
                     <LoaderCircle className="animate-spin" />

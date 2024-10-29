@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import Head from "next/head";
 import Colors from "../../lib/colors.json";
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { api } from "../services/apiClient";
 import {
   Table,
@@ -29,14 +29,23 @@ import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { LoaderCircle } from "lucide-react";
 import LoaderModal from "../_components/loaderModal";
+import SearchComponent from "../_components/SearchComponent";
+
+type Category = {
+ id :String,
+ name:String
+}
+
 const Categories = () => {
   const { toast } = useToast();
-  const [categoriesList, setCategoriesList] = useState([]);
+  const [categoriesList, setCategoriesList] = useState<Category[]> ([]);
+  const [filteredList,setFilteredList] = useState<Category[]>([])
   const [open, setOpen] = useState(false);
   const [disabled, setDisabled] = useState(true);
   const [category, setCategory] = useState("");
   const [loading,setLoading] = useState(false)
   const [loaderNew,setLoaderNew] = useState(false)
+  const [search,setSearch ] = useState('')
   //busca as categorias da api
 
   async function getCategories() {
@@ -45,6 +54,7 @@ const Categories = () => {
       .get("/categories")
       .then((res) => {
         setCategoriesList(res.data);
+        setFilteredList(res.data)
         setLoading(false)
       })
       .catch((error) => {
@@ -68,6 +78,25 @@ const Categories = () => {
     }
   }, [category]);
 
+function SearchCategories(e:FormEvent){
+e.preventDefault()
+if(search!==''){
+  const filtered = categoriesList.filter((item)=> item.name.toUpperCase().includes(search.toUpperCase()))
+  if(filtered.length>0){
+    setFilteredList(filtered)
+  }else{
+    setFilteredList([])
+  }
+}
+}
+
+useEffect(()=> {
+
+  if(search===''){
+    setFilteredList(categoriesList)
+  }
+},[search])
+  
   async function AddCategory() {
     if (category !== "") {
       const data = {
@@ -97,13 +126,13 @@ const Categories = () => {
   }
 
   return (
-    <div className="w-full">
+    <div className="w-full h-screen">
       <Toaster />
       <head>
         <title>Pedido Fácil - Nova Categoria</title>
       </head>
       <Header />
-      <div className=" my-4 mx-40 max-md:mx-4 bg-white px-3 py-3 rounded-md">
+      <div className=" my-4 mx-40 max-md:mx-4 bg-white px-3 py-3 rounded-md h-[90%]">
         <div className="flex items-center justify-between">
           <h1 className="font-semibold text-[1.2rem]">Categorias</h1>
           <Button
@@ -113,9 +142,13 @@ const Categories = () => {
             Nova categoria
           </Button>
         </div>
+    {/** campo de pesquisa */}
+    <form onSubmit={SearchCategories}>
+           <SearchComponent search={search} setSearch={setSearch} onClick={()=> SearchCategories} />
 
-        {categoriesList.length === 0 ? (
-          <div className="flex flex-col items-center mt-20">
+        </form>
+        {filteredList.length === 0 ? (
+          <div className="flex flex-col items-center justify-center h-full">
             <Image
               src={"/caixa-vazia.png"}
               width={120}
@@ -134,9 +167,9 @@ const Categories = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {categoriesList.length > 0 &&
-                  categoriesList.map((item: { id: string; name: string }) => (
-                    <TableRow key={item.id}>
+                {filteredList.length > 0 &&
+                  filteredList.map((item: Category) => (
+                    <TableRow key={item.id.toString()}>
                       <TableCell>{item.name}</TableCell>
                     </TableRow>
                   ))}
