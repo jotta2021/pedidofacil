@@ -220,7 +220,7 @@ if(filteredItems.length>0){
       if (imageFile) {
         data.append("file", imageFile);
       }else{
-        data.append("banner", selectProduct?.banner)
+        data.append("banner", selectProduct && selectProduct.banner ? selectProduct.banner : "");
       }
       data.append("description", description);
 
